@@ -82,13 +82,18 @@ public class GpsObserver implements GpsStatus.Listener, LocationListener {
                 mBus.post(new FirstFixEvent());
             }
         } else if (event == GpsStatus.GPS_EVENT_SATELLITE_STATUS) {
-            GpsStatus gpsStatus = locationManager.getGpsStatus(null);
-            int all = 0;
-            Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
-            for (GpsSatellite ignored : satellites) {
-                all++;
+
+            try{
+                GpsStatus gpsStatus = locationManager.getGpsStatus(null);
+                int all = 0;
+                Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
+                for (GpsSatellite ignored : satellites) {
+                    all++;
+                }
+                mBus.post(new SatellitesEvent(all));
+            }catch (SecurityException e){
+                return;
             }
-            mBus.post(new SatellitesEvent(all));
         }
     }
 
