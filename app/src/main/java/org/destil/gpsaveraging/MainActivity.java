@@ -23,7 +23,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.destil.gpsaveraging.base.BaseActivity;
-import org.destil.gpsaveraging.billing.Billing;
 import org.destil.gpsaveraging.ui.activity.AboutActivity;
 import org.destil.gpsaveraging.ui.activity.SettingsActivity;
 import org.destil.gpsaveraging.ui.fragment.MainFragment;
@@ -38,27 +37,20 @@ import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity {
 
-    @Inject
-    Billing mBilling;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.component().injectToMainActivity(this);
-        mBilling.activityOnCreate();
     }
 
     @Override
     protected void onDestroy() {
-        mBilling.activityOnDestroy();
         super.onDestroy();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!mBilling.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -80,7 +72,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.menu_remove_ads).setVisible(!mBilling.isFullVersion());
         return true;
     }
 
@@ -92,9 +83,6 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.menu_about:
                 startActivity(AboutActivity.class);
-                break;
-            case R.id.menu_remove_ads:
-                mBilling.purchase(this);
                 break;
         }
         return super.onOptionsItemSelected(item);

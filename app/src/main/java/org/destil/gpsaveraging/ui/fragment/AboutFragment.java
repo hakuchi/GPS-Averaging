@@ -28,7 +28,6 @@ import android.view.ViewGroup;
 import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.base.BaseFragment;
-import org.destil.gpsaveraging.billing.Billing;
 import org.destil.gpsaveraging.databinding.FragmentAboutBinding;
 import org.destil.gpsaveraging.ui.viewmodel.AboutViewModel;
 import org.destil.gpsaveraging.util.PackageUtils;
@@ -44,9 +43,6 @@ import javax.inject.Inject;
  */
 public class AboutFragment extends BaseFragment implements AboutViewModel.ClickListener {
 
-
-    @Inject
-    Billing mBilling;
     private AboutViewModel mViewModel;
 
     @Nullable
@@ -64,7 +60,6 @@ public class AboutFragment extends BaseFragment implements AboutViewModel.ClickL
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel.version.set(PackageUtils.getAppVersion(getContext()));
-        mViewModel.showThankYou.set(mBilling.isFullVersion());
     }
 
     @Override

@@ -18,7 +18,6 @@ package org.destil.gpsaveraging.ui.viewmodel;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import java.io.Serializable;

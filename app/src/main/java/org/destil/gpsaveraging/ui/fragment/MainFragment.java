@@ -106,12 +106,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mAdManager = new AdManager(mBinding.ad);
-        if (!mBilling.isFullVersion()) {
-            mViewModel.showAd = true;
-            Animations.showFromBottom(mBinding.ad);
-            mAdManager.load();
-        }
     }
 
     @Override
@@ -129,7 +123,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Override
     public void onDestroyView() {
         mBus.unregister(this);
-        mAdManager.destroy();
+
         super.onDestroyView();
     }
 
@@ -149,7 +143,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         if (!mViewModel.hasFix) {
             mViewModel.hasFix = true;
             Animations.hide(mBinding.progress);
-            Animations.showFromTop(mBinding.currentLocation);
+            startAveraging();
             Animations.showFromBottom(mBinding.fab);
         }
     }
@@ -173,15 +167,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Subscribe
     public void onAverageLocation(AveragedLocationEvent e) {
         mBinding.averageLocation.updateLocation(e.getLocation());
-    }
-
-    @Subscribe
-    public void onBecomePremium(BecomePremiumEvent e) {
-        if (mViewModel.showAd) {
-            mViewModel.showAd = false;
-            mBinding.ad.setVisibility(View.GONE);
-        }
-        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -213,9 +198,8 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
             mBinding.averageLocation.collapse(new Animations.AnimationEndCallback() {
                 @Override
                 public void onAnimationEnd() {
-                    Animations.showFromTop(mBinding.currentLocation);
                     if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        Animations.moveToBottom(mBinding.averageLocation);
+                        mBinding.averageLocation.setVisibility(View.VISIBLE);
                     }
                 }
             });
@@ -230,17 +214,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         mViewModel.isReadyForSharing = true;
         mViewModel.stopIcon.set(false);
         mIntents.answerToThirdParty(getActivity());
-        Animations.hideToTop(mBinding.currentLocation);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Animations.moveToTop(mBinding.averageLocation, new Animations.AnimationEndCallback() {
-                @Override
-                public void onAnimationEnd() {
-                    mBinding.averageLocation.expand();
-                }
-            });
-        } else {
-            mBinding.averageLocation.expand();
-            mBinding.currentLocation.setVisibility(View.GONE);
-        }
+        mBinding.averageLocation.expand();
     }
 }
