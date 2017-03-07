@@ -17,13 +17,16 @@
 package org.destil.gpsaveraging.ui.fragment;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -32,8 +35,8 @@ import org.destil.gpsaveraging.App;
 import org.destil.gpsaveraging.R;
 import org.destil.gpsaveraging.base.BaseFragment;
 import org.destil.gpsaveraging.billing.Billing;
-import org.destil.gpsaveraging.billing.event.BecomePremiumEvent;
 import org.destil.gpsaveraging.data.Intents;
+import org.destil.gpsaveraging.data.Preferences;
 import org.destil.gpsaveraging.databinding.FragmentMainBinding;
 import org.destil.gpsaveraging.location.GpsObserver;
 import org.destil.gpsaveraging.location.event.CurrentLocationEvent;
@@ -43,7 +46,6 @@ import org.destil.gpsaveraging.location.event.SatellitesEvent;
 import org.destil.gpsaveraging.measure.LocationAverager;
 import org.destil.gpsaveraging.measure.Measurements;
 import org.destil.gpsaveraging.measure.event.AveragedLocationEvent;
-import org.destil.gpsaveraging.ui.AdManager;
 import org.destil.gpsaveraging.ui.Animations;
 import org.destil.gpsaveraging.ui.view.Snackbar;
 import org.destil.gpsaveraging.ui.viewmodel.MainFragmentViewModel;
@@ -75,7 +77,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Inject
     Billing mBilling;
 
-    private AdManager mAdManager;
     private MainFragmentViewModel mViewModel;
     private FragmentMainBinding mBinding;
 
@@ -167,6 +168,13 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Subscribe
     public void onAverageLocation(AveragedLocationEvent e) {
         mBinding.averageLocation.updateLocation(e.getLocation());
+        // if the precision has reached 5m, stop averaging
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        String units = prefs.getString(Preferences.UNITS, Preferences.UNITS_DEFAULT_VALUE);
+        double accuracy = units.equals(Preferences.UNITS_METRIC) ? e.getLocation().getAccuracy() : e.getLocation().getAccuracy() * 3.28132739;
+        if ((accuracy < 5.0)){
+                stopAveraging();
+        }
     }
 
     @Override
