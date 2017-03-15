@@ -237,20 +237,18 @@ public class HomeFragment extends BaseFragment {
     public void submitAccountDialog(String account_name) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.submit_acc_dialog, null);
+        final View dialogView = inflater.inflate(R.layout.alert_dialog, null);
         final String acc_name = account_name;
         dialogBuilder.setView(dialogView);
-        final TextView tv = (TextView) dialogView.findViewById(R.id.accountDetails);
-        final EditText accountNotes = (EditText) dialogView.findViewById(R.id.assetNotes);
+        final TextView tv = (TextView) dialogView.findViewById(R.id.alertMessage);
         tv.setText("Account: " + assetId.getText().toString() + "\nName:"+ account_name);
         dialogBuilder.setTitle("Valid account");
         dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                // Submit the validated account, also add notes from accountNotes
+                // Submit the validated account
                 HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                 urlBuilder.addQueryParameter("acc_number", assetId.getText().toString());
                 urlBuilder.addQueryParameter("acc_name", acc_name);
-                urlBuilder.addQueryParameter("acc_notes", accountNotes.getText().toString());
                 urlBuilder.addQueryParameter("cmd", "submitLoc");
 
                 submitAccount(urlBuilder.build().toString());

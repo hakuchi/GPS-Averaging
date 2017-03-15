@@ -167,7 +167,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Subscribe
     public void onAverageLocation(AveragedLocationEvent e) {
         mBinding.averageLocation.updateLocation(e.getLocation());
-        // if the precision is btn 0-1m, stop averaging
+        // if the precision is btn 0.5-1m, stop averaging
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         String units = prefs.getString(Preferences.UNITS, Preferences.UNITS_DEFAULT_VALUE);
         double accuracy = units.equals(Preferences.UNITS_METRIC) ? e.getLocation().getAccuracy() : e.getLocation().getAccuracy() * 3.28132739;
@@ -221,6 +221,5 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         mViewModel.isReadyForSharing = true;
         mViewModel.stopIcon.set(false);
         mIntents.answerToThirdParty(getActivity());
-        mBinding.averageLocation.expand();
     }
 }
