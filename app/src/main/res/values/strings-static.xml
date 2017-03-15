@@ -18,7 +18,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
            tools:ignore="MissingTranslation">
     <!-- Static language-independent strings -->
-    <string name="app_name" tools:translatable="false">GPS Averaging</string>
+    <string name="app_name">NWSC Client\'s Meter Location</string>
     <string name="heart" tools:translatable="false">♥</string>
     <string name="author_name" tools:translatable="false">David \'Destil\' Vávra</string>
 </resources>

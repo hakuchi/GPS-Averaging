@@ -16,7 +16,7 @@
   -->
 
 <manifest
-    package="org.destil.gpsaveraging"
+    package="com.cytrack.meterlocation"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="auto"
@@ -37,7 +37,7 @@
         android:smallScreens="true"/>
 
     <application
-        android:name=".App"
+        android:name="com.cytrack.meterlocation.App"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@drawable/ic_launcher"
@@ -51,46 +51,50 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
 
+        <activity android:name="com.cytrack.meterlocation.ui.activity.HomeActivity"
+            android:screenOrientation="sensorPortrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
-            android:name=".MainActivity"
+            android:name="com.cytrack.meterlocation.MainActivity"
             android:launchMode="singleTop"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
             <intent-filter>
                 <action android:name="menion.android.locus.GET_POINT"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="cz.destil.gpsaveraging.AVERAGED_LOCATION"/>
+                <action android:name="com.cytrack.meterlocation.AVERAGED_LOCATION"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.SettingsActivity"
+            android:name="com.cytrack.meterlocation.ui.activity.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.cytrack.meterlocation.MainActivity"
             tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value="com.cytrack.meterlocation.MainActivity"/>
         </activity>
         <activity
-            android:name=".ui.activity.AboutActivity"
+            android:name="com.cytrack.meterlocation.ui.activity.AboutActivity"
             android:label="@string/about"
             tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value="com.cytrack.meterlocation.MainActivity"/>
         </activity>
 
         <service
-            android:name=".measure.PeriodicService"
+            android:name="com.cytrack.meterlocation.measure.PeriodicService"
             android:exported="false"/>
 
         <meta-data
@@ -98,8 +102,8 @@
             android:value="0c705940803f323e266a2722928d5cd883833292"/>
 
         <provider
-            android:name=".data.ExportProvider"
-            android:authorities="org.destil.gpsaveraging"
+            android:name="com.cytrack.meterlocation.data.ExportProvider"
+            android:authorities="com.cytrack.meterlocation"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedContentProvider">

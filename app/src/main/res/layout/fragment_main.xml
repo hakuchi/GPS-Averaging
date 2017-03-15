@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="org.destil.gpsaveraging.ui.viewmodel.MainFragmentViewModel"/>
+            type="com.cytrack.meterlocation.ui.viewmodel.MainFragmentViewModel"/>
     </data>
 
     <LinearLayout
@@ -58,12 +58,12 @@
 
                 <android.support.percent.PercentRelativeLayout style="@style/CardsLayout">
 
-                    <org.destil.gpsaveraging.ui.view.CurrentLocationCardView
+                    <com.cytrack.meterlocation.ui.view.CurrentLocationCardView
                         android:id="@+id/current_location"
                         style="@style/Card"
                         app:visible="@{viewModel.hasFix &amp;&amp; !viewModel.isReadyForSharing}"/>
 
-                    <org.destil.gpsaveraging.ui.view.AverageLocationCardView
+                    <com.cytrack.meterlocation.ui.view.AverageLocationCardView
                         android:id="@+id/average_location"
                         style="@style/Card.Second"
                         app:visible="@{viewModel.isAveraging || viewModel.isReadyForSharing}"/>

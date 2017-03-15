@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="org.destil.gpsaveraging.ui.viewmodel.AboutViewModel"/>
+            type="com.cytrack.meterlocation.ui.viewmodel.AboutViewModel"/>
     </data>
 
     <ScrollView

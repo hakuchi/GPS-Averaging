@@ -3,7 +3,7 @@ GPS Averaging
 
 Android app for precise GPS measurements, particularly useful for placing new geocaches.
 
- * [Install from Google Play](https://play.google.com/store/apps/details?id=org.destil.gpsaveraging)
+ * [Install from Google Play](https://play.google.com/store/apps/details?id=org.cytrack.meterlocation)
  * Problems? [Report them here](https://groups.google.com/forum/?fromgroups#!forum/gps-averaging-app)
  * Would you like the app in your language? [Contribute to translations](http://www.getlocalization.com/GPSAveraging)
 
@@ -22,7 +22,7 @@ Start new activity using this code:
 		startActivityForResult(intent, 0);
 	} catch (ActivityNotFoundException e) {
 		//GPS Averaging is not installed, you can redirect user to Play like this:
-		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.destil.gpsaveraging"));
+		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=org.cytrack.meterlocation"));
 		startActivity(intent);
 	}
 In your activity override function onActivityResult for receiving data:
