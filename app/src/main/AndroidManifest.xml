@@ -46,11 +46,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
 
-        <!-- This meta-data tag is required to use Google Play Services. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-
         <activity android:name="com.cytrack.meterlocation.ui.activity.HomeActivity"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
@@ -99,7 +94,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="0c705940803f323e266a2722928d5cd883833292"/>
+            android:value="8a100b993a5976551f82410801bd2e28b4c5222e"/>
 
         <provider
             android:name="com.cytrack.meterlocation.data.ExportProvider"

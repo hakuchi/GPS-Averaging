@@ -21,4 +21,5 @@
     <string name="app_name">NWSC Client\'s Meter Location</string>
     <string name="heart" tools:translatable="false">♥</string>
     <string name="author_name" tools:translatable="false">David \'Destil\' Vávra</string>
+    <string name="hint"><font size="11">Account Number</font></string>
 </resources>

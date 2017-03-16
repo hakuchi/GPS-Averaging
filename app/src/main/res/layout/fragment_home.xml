@@ -19,7 +19,7 @@
         android:id="@+id/assetid"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:hint="Account Number"
+        android:hint="@string/hint"
         android:inputType="number"
         android:textSize="44sp"/>
     </android.support.design.widget.TextInputLayout>

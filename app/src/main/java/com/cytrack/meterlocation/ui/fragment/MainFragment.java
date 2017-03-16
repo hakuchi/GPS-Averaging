@@ -27,13 +27,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-
 import com.cytrack.meterlocation.App;
 import com.cytrack.meterlocation.R;
 import com.cytrack.meterlocation.base.BaseFragment;
-import com.cytrack.meterlocation.billing.Billing;
 import com.cytrack.meterlocation.data.Intents;
 import com.cytrack.meterlocation.data.Preferences;
 import com.cytrack.meterlocation.databinding.FragmentMainBinding;
@@ -48,6 +44,8 @@ import com.cytrack.meterlocation.measure.event.AveragedLocationEvent;
 import com.cytrack.meterlocation.ui.Animations;
 import com.cytrack.meterlocation.ui.view.Snackbar;
 import com.cytrack.meterlocation.ui.viewmodel.MainFragmentViewModel;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
@@ -73,8 +71,6 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     LocationAverager mAverager;
     @Inject
     Intents mIntents;
-    @Inject
-    Billing mBilling;
 
     private MainFragmentViewModel mViewModel;
     private FragmentMainBinding mBinding;

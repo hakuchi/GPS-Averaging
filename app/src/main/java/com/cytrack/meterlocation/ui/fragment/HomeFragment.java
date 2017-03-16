@@ -16,13 +16,13 @@
 
 package com.cytrack.meterlocation.ui.fragment;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -36,7 +36,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cytrack.meterlocation.R;
-import com.cytrack.meterlocation.base.BaseActivity;
 import com.cytrack.meterlocation.base.BaseFragment;
 import com.cytrack.meterlocation.data.Keys;
 import com.cytrack.meterlocation.ui.view.ColoredSnackBar;
@@ -53,7 +52,6 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import permissions.dispatcher.RuntimePermissions;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -68,15 +66,14 @@ public class HomeFragment extends BaseFragment {
     private Button submitLocationBtn;
     private EditText assetId;
     private OkHttpClient client;
+    private String androidId;
     private String url = "http://www.cy-track.com/uFind/";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.activity_home, container, false);
-
-        final Activity activity = getActivity();
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -87,9 +84,18 @@ public class HomeFragment extends BaseFragment {
 
         client = new OkHttpClient();
 
+        androidId = Settings.Secure.getString(getActivity().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+
+        final Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), "Device ID: " + androidId, Snackbar.LENGTH_INDEFINITE);
+        ColoredSnackBar.info(snackbar).show();
+
         submitLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                snackbar.dismiss();
 
                 if (assetId.getText().length() > 0) {
                     assetIdLayout.setErrorEnabled(false);
@@ -111,6 +117,7 @@ public class HomeFragment extends BaseFragment {
 
         return view;
     }
+
 
     private void checkAccount(String url) {
         final Request request = new Request.Builder()
@@ -212,7 +219,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void showSnackBarAlert(String message) {
-        Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.parentview), message, Snackbar.LENGTH_LONG);
+        Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
         ColoredSnackBar.alert(snackbar).show();
     }
 
@@ -227,6 +234,7 @@ public class HomeFragment extends BaseFragment {
             urlBuilder.addQueryParameter("lng", String.valueOf(locationBundle.getDouble("longitude")));
             urlBuilder.addQueryParameter("alt", String.valueOf(locationBundle.getDouble("altitude")));
             urlBuilder.addQueryParameter("acc", String.valueOf(locationBundle.getDouble("accuracy")));
+            urlBuilder.addQueryParameter("device_id", androidId);
             urlBuilder.addQueryParameter("cmd", "numValidity");
             checkAccount(urlBuilder.build().toString());
         } else {
@@ -249,6 +257,7 @@ public class HomeFragment extends BaseFragment {
                 HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
                 urlBuilder.addQueryParameter("acc_number", assetId.getText().toString());
                 urlBuilder.addQueryParameter("acc_name", acc_name);
+                urlBuilder.addQueryParameter("device_id", androidId);
                 urlBuilder.addQueryParameter("cmd", "submitLoc");
 
                 submitAccount(urlBuilder.build().toString());
