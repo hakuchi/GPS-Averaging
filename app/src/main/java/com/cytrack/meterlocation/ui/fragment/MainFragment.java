@@ -17,12 +17,18 @@
 package com.cytrack.meterlocation.ui.fragment;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +58,8 @@ import javax.inject.Inject;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import permissions.dispatcher.ShowsRationale;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * Fragment containing most of the UI. It listens to events and triggers related components.
@@ -84,6 +92,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         } else {
             mViewModel = (MainFragmentViewModel) savedInstanceState.getSerializable("VIEW_MODEL");
         }
+
         if (mViewModel != null) {
             mViewModel.setClickListener(this);
             // if averaging is running in background and android doesn't keep the activity
@@ -107,6 +116,7 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Override
     public void onStart() {
         super.onStart();
+        checkGps();
         MainFragmentPermissionsDispatcher.observeGpsWithCheck(this);
     }
 
@@ -217,5 +227,27 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
         mViewModel.isReadyForSharing = true;
         mViewModel.stopIcon.set(false);
         mIntents.answerToThirdParty(getActivity());
+    }
+
+    // Get Location Manager and check for GPS & Network location services
+    private void checkGps() {
+        LocationManager lm = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                !lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            // Build the alert dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("GPS Not Active");
+            builder.setMessage("Please enable Location Services and GPS");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // Show location settings when the user acknowledges the alert dialog
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            Dialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        }
     }
 }

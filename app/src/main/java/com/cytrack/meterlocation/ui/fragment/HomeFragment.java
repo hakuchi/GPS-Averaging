@@ -17,8 +17,11 @@
 package com.cytrack.meterlocation.ui.fragment;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -99,13 +102,17 @@ public class HomeFragment extends BaseFragment {
 
                 if (assetId.getText().length() > 0) {
                     assetIdLayout.setErrorEnabled(false);
-                    try {
-                        Intent intent = new Intent("com.cytrack.meterlocation.AVERAGED_LOCATION");
-                        startActivityForResult(intent, 0);
-                    } catch (ActivityNotFoundException e) {
-                        //GPS Averaging is not installed, you can redirect user to Play like this:
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.cytrack.meterlocation"));
-                        startActivity(intent);
+                    if (isNetworkAvailable()) {
+                        try {
+                            Intent intent = new Intent("com.cytrack.meterlocation.AVERAGED_LOCATION");
+                            startActivityForResult(intent, 0);
+                        } catch (ActivityNotFoundException e) {
+                            //GPS Averaging is not installed, you can redirect user to Play like this:
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.cytrack.meterlocation"));
+                            startActivity(intent);
+                        }
+                    } else {
+                        showSnackBarAlert("Check the network connection...");
                     }
                 } else {
                     assetIdLayout.setErrorEnabled(true);
@@ -249,7 +256,7 @@ public class HomeFragment extends BaseFragment {
         final String acc_name = account_name;
         dialogBuilder.setView(dialogView);
         final TextView tv = (TextView) dialogView.findViewById(R.id.alertMessage);
-        tv.setText("Account: " + assetId.getText().toString() + "\nName:"+ account_name);
+        tv.setText("Account: " + assetId.getText().toString() + "\nName: "+ account_name);
         dialogBuilder.setTitle("Valid account");
         dialogBuilder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -288,6 +295,16 @@ public class HomeFragment extends BaseFragment {
         });
         AlertDialog b = dialogBuilder.create();
         b.show();
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityMgr.getActiveNetworkInfo();
+        /// if no network is available networkInfo will be null
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
     }
 }
 
