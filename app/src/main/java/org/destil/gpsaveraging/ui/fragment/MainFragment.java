@@ -168,13 +168,13 @@ public class MainFragment extends BaseFragment implements MainFragmentViewModel.
     @Subscribe
     public void onAverageLocation(AveragedLocationEvent e) {
         mBinding.averageLocation.updateLocation(e.getLocation());
-        // if the precision has reached 5m, stop averaging
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        String units = prefs.getString(Preferences.UNITS, Preferences.UNITS_DEFAULT_VALUE);
-        double accuracy = units.equals(Preferences.UNITS_METRIC) ? e.getLocation().getAccuracy() : e.getLocation().getAccuracy() * 3.28132739;
-        if ((accuracy < 5.0)){
-                stopAveraging();
-        }
+        // if the precision has reached 3m, stop averaging
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        //String units = prefs.getString(Preferences.UNITS, Preferences.UNITS_DEFAULT_VALUE);
+        //double accuracy = units.equals(Preferences.UNITS_METRIC) ? e.getLocation().getAccuracy() : e.getLocation().getAccuracy() * 3.28132739;
+        //if ((accuracy < 3.0)){
+        //        stopAveraging();
+        //}
     }
 
     @Override
